@@ -198,9 +198,21 @@ async def start_web_app():
     app.router.add_get("/health", handle_health)
     runner = web.AppRunner(app); await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", PORT); await site.start()
+async def keepalive():
+    import aiohttp, asyncio
+    url = "https://hatsune-miku-bot-dc.onrender.com/health"  # <- deine Render URL + /health
+    while True:
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as resp:
+                    await resp.text()
+        except Exception:
+            pass
+        await asyncio.sleep(120)  # ping alle 2 Minuten
 
 async def main():
     await start_web_app()
+    asyncio.create_task(keepalive())  # Keepalive-Task starten
     await bot.start(TOKEN)
 
 if __name__ == "__main__":
