@@ -175,7 +175,7 @@ async def ticket(interaction: discord.Interaction, thema: str):
     await interaction.response.send_message(f"Ticket erstellt: {ch.mention}", ephemeral=True)
 
 @bot.tree.command(name="close_ticket", description="Schließt (löscht) das aktuelle Ticket.")
-@app_commands.checks.has_any_role("Admin", MOD_ROLE_NAME_DEFAULT)
+@app_commands.checks.has_any_role("Adoglazer")
 async def close_ticket(interaction: discord.Interaction):
     ch = interaction.channel
     if not isinstance(ch, discord.TextChannel) or not ch.name.startswith("ticket-"):
