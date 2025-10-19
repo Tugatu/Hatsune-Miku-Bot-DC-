@@ -58,9 +58,7 @@ async def get_or_create_voice(guild, name, category=None, overwrites=None):
           discord.utils.get(guild.voice_channels, name=name))
     return ch or await guild.create_voice_channel(name, category=category, overwrites=overwrites)
 
-@bot.event
-async def on_ready():
-    logging.info(f"✅ Eingeloggt als {bot.user} (ID: {bot.user.id})")
+import random  
 
 @bot.event
 async def on_member_join(member: discord.Member):
@@ -72,24 +70,23 @@ async def on_member_join(member: discord.Member):
         try:
             await member.add_roles(smash, reason="Auto-Join-Rolle")
         except discord.Forbidden:
-            # Falls die Bot-Rolle unter "Smash" steht oder keine Rechte hat, kann er nicht zuweisen.
-            pass
+            pass  
 
     # 2) Willkommenskanal suchen
     ch = discord.utils.get(guild.text_channels, name="👋-willkommen")
     if not ch:
-        return  # Wenn der Kanal anders heißt, einfach nichts senden (kein Fehler)
+        return
 
-    # 3) Begrüßungstexte 
+    # 3) Begrüßungstexte
     greetings = [
-            # Pipe Bomb/Eigene Sachen?
-        f"\"Woah Pipe Bomb\" — äh… willkommen {member.mention}!",
-        f"\ "Was geht du Loser\" - setz dich hin und gib ruhe {member.mention}!",
+        f'"Woah Pipe Bomb" — äh… willkommen {member.mention}!',
+        f'"Was geht, du Loser" – setz dich hin und gib Ruhe, {member.mention}!',
     ]
 
     # 4) Zufällig eine Nachricht auswählen und senden
     msg = random.choice(greetings)
     await ch.send(msg)
+
 
 @bot.tree.command(name="bootstrap", description="Erstellt Rollen, Kategorien, Kanäle & setzt AFK/Willkommen.")
 @app_commands.default_permissions(administrator=True)
