@@ -140,11 +140,13 @@ async def bootstrap(interaction: discord.Interaction):
 
     await interaction.followup.send("Fertig! ✅ Struktur & AFK gesetzt. (Fehlt was? Bot-Rechte prüfen.)", ephemeral=True)
 
-@bot.tree.command(name="ticket", description="Privater Support-Channel (statt DM).")
-async def ticket(interaction: discord.Interaction, thema: str):
-    guild = interaction.guild
-    admin = discord.utils.get(guild.roles, name="Admin")
-    mod = discord.utils.get(guild.roles, name=bot.mod_role_name)
+# @bot.tree.command(name="ticket", description="Privater Support-Channel (statt DM).")
+# async def ticket(interaction: discord.Interaction, thema: str):
+#     guild = interaction.guild
+#     admin = discord.utils.get(guild.roles, name="Admin")
+#     mod = discord.utils.get(guild.roles, name=bot.mod_role_name)
+#     ...
+
 
     overwrites = {
         guild.default_role: discord.PermissionOverwrite(read_messages=False),
