@@ -79,8 +79,9 @@ async def on_member_join(member: discord.Member):
 
     # 3) Begrüßungstexte
     greetings = [
-        f'"Woah Pipe Bomb" — äh… willkommen {member.mention}!',
-        f'"Was geht, du Loser" – setz dich hin und gib Ruhe, {member.mention}!',
+        f' Woah Pipe Bomb — äh… willkommen {member.mention}!',
+        f' Was geht, du Loser – setz dich hin und gib Ruhe, {member.mention}!',
+        f' Will-kommen auf dem Server – the loooooooooooooooooooooong way, {member.mention}!',
     ]
 
     # 4) Zufällig eine Nachricht auswählen und senden
