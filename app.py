@@ -4,6 +4,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from aiohttp import web
+import random
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s: %(message)s")
 load_dotenv()
@@ -63,9 +64,32 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member: discord.Member):
-    ch = discord.utils.get(member.guild.text_channels, name="👋-willkommen")
-    if ch:
-        await ch.send(f"Willkommen {member.mention}! Schau in **#💬-allgemein** vorbei ✨")
+    guild = member.guild
+
+    # 1) Auto-Rolle "Smash" vergeben
+    smash = discord.utils.get(guild.roles, name="Smash")
+    if smash:
+        try:
+            await member.add_roles(smash, reason="Auto-Join-Rolle")
+        except discord.Forbidden:
+            # Falls die Bot-Rolle unter "Smash" steht oder keine Rechte hat, kann er nicht zuweisen.
+            pass
+
+    # 2) Willkommenskanal suchen
+    ch = discord.utils.get(guild.text_channels, name="👋-willkommen")
+    if not ch:
+        return  # Wenn der Kanal anders heißt, einfach nichts senden (kein Fehler)
+
+    # 3) Begrüßungstexte 
+    greetings = [
+            # Pipe Bomb/Eigene Sachen?
+        f"\"Woah Pipe Bomb\" — äh… willkommen {member.mention}!",
+        f"\ "Was geht du Loser\" - setz dich hin und gib ruhe {member.mention}!",
+    ]
+
+    # 4) Zufällig eine Nachricht auswählen und senden
+    msg = random.choice(greetings)
+    await ch.send(msg)
 
 @bot.tree.command(name="bootstrap", description="Erstellt Rollen, Kategorien, Kanäle & setzt AFK/Willkommen.")
 @app_commands.default_permissions(administrator=True)
@@ -200,7 +224,7 @@ async def start_web_app():
     site = web.TCPSite(runner, "0.0.0.0", PORT); await site.start()
 async def keepalive():
     import aiohttp, asyncio
-    url = "https://hatsune-miku-bot-dc.onrender.com/health"  # <- deine Render URL + /health
+    url = "https://hatsune-miku-bot-dc.onrender.com/health" 
     while True:
         try:
             async with aiohttp.ClientSession() as session:
